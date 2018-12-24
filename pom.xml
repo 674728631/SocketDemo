@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>Demo01</module>
+        <module>Demo02</module>
     </modules>
     <packaging>pom</packaging>
 
