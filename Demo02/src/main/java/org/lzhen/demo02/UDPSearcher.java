@@ -12,18 +12,34 @@ public class UDPSearcher {
         DatagramSocket ds = new DatagramSocket();
 
         // 构建一份请求数据
-        String requestData = "nishishame";
+        String requestData = MessageCreator.buidWithPort(20000);
         byte[] requestDataByte = requestData.getBytes();
         DatagramPacket requestPacket = new DatagramPacket(requestDataByte, requestDataByte.length);
 
-        // 20000端口, 广播地址
-        requestPacket.setAddress(InetAddress.getByName("255.255.255.255"));
+        // 本机20000端口
+        requestPacket.setAddress(InetAddress.getLocalHost());
         requestPacket.setPort(20000);
 
         // 发送
         ds.send(requestPacket);
-        ds.close();
+        System.out.println("UDPSearcher 发送成功。。。");
+
+        // 接收实体
+        final byte[] buf = new byte[512];
+        DatagramPacket receivePack = new DatagramPacket(buf, buf.length);
+        // 接收
+        ds.receive(receivePack);
+        System.out.println("UDPSearcher 接收成功。。。");
+
+        // 打印接收到的信息，发送至的信息
+        String data = new String(receivePack.getData(),0, receivePack.getLength(),"utf-8");
+        System.out.println("UDPSearcher receive form ip:" + receivePack.getAddress().getHostAddress()
+                + "\tport:" + receivePack.getPort() + "\tdata:" + data);
+
+
         // 完成
-        System.out.println("UDPSearcher sendBroadcast finished.");
+        System.out.println("UDPSearcher Finished.");
+        ds.close();
+
     }
 }
